@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel de Control - Consumidor</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; margin: 0; padding: 20px; }
+        .header { background: #1a73e8; color: white; padding: 20px; border-radius: 10px; text-align: center; margin-bottom: 30px; }
+        .container { max-width: 900px; margin: auto; }
+        .card { background: white; border-radius: 8px; padding: 15px; margin-bottom: 15px; border-left: 5px solid #1a73e8; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .status { font-weight: bold; color: #1a73e8; }
+        .tracking { font-size: 0.9em; color: #666; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>📦 Datos Consumidos del Microservicio A</h1>
+        <p>Demostración de Comunicación entre Pods en Kubernetes</p>
+    </div>
+    <div id="lista-entregas">Cargando datos desde el servicio interno...</div>
+</div>
+
+<script>
+    async function cargarDatos() {
+        try {
+            const res = await fetch('/api/consumir-datos');
+            const data = await res.json();
+            const container = document.getElementById('lista-entregas');
+            container.innerHTML = '';
+
+            data.forEach(item => {
+                container.innerHTML += `
+                        <div class="card">
+                            <h3>Orden #${item.orderId}</h3>
+                            <p><strong>Destino:</strong> ${item.address}</p>
+                            <p class="status">Estado: ${item.status}</p>
+                            <p class="tracking">Tracking: ${item.trackingNumber}</p>
+                        </div>
+                    `;
+            });
+        } catch (e) {
+            document.getElementById('lista-entregas').innerHTML = "Error al conectar con el microservicio principal.";
+        }
+    }
+    cargarDatos();
+</script>
+</body>
+</html>
