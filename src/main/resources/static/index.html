@@ -24,7 +24,7 @@
 <script>
     async function cargarDatos() {
         try {
-            const res = await fetch('/api/consumir-datos');
+            const res = await fetch('http://52.171.64.246/api/consumir-datos');
             const data = await res.json();
             const container = document.getElementById('lista-entregas');
             container.innerHTML = '';
