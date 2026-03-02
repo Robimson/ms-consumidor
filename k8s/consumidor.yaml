@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ms-consumidor-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ms-consumidor-app
+  template:
+    metadata:
+      labels:
+        app: ms-consumidor-app
+    spec:
+      containers:
+        - name: ms-consumidor
+          # REEMPLAZA "tu-usuario" por tu usuario de Docker Hub
+          image: ${DOCKER_IMAGE}
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ms-consumidor-service
+spec:
+  type: LoadBalancer # Para que el profe también pueda entrar a este por IP
+  selector:
+    app: ms-consumidor-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
